@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Spring-social-examples-thymeleaf : Fork of pkainulainen / spring-social-examples with thymeleaf instead of jsp" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Spring-social-examples-thymeleaf</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/lightszentip/spring-social-examples-thymeleaf">View on GitHub</a>
+
+          <h1 id="project_title">Spring-social-examples-thymeleaf</h1>
+          <h2 id="project_tagline">Fork of pkainulainen / spring-social-examples with thymeleaf instead of jsp</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/lightszentip/spring-social-examples-thymeleaf/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/lightszentip/spring-social-examples-thymeleaf/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="thymeleaf-fork-of-spring-social-examples-from-pkainulainen" class="anchor" href="#thymeleaf-fork-of-spring-social-examples-from-pkainulainen"><span class="octicon octicon-link"></span></a>Thymeleaf fork of spring-social-examples from pkainulainen</h1>
+
+<p>This is a fork from <a href="https://github.com/pkainulainen/spring-social-examples" title="https://github.com/pkainulainen/spring-social-examples">https://github.com/pkainulainen/spring-social-examples</a>. It is the source to the blog post "Adding Social Sign In to a Spring MVC Web Application: Registration and Login" from Petri Kainulainen (see at <a href="http://www.petrikainulainen.net/programming/spring-framework/adding-social-sign-in-to-a-spring-mvc-web-application-registration-and-login/" title="http://www.petrikainulainen.net/programming/spring-framework/adding-social-sign-in-to-a-spring-mvc-web-application-registration-and-login/">http://www.petrikainulainen.net/programming/spring-framework/adding-social-sign-in-to-a-spring-mvc-web-application-registration-and-login/</a>).</p>
+
+<p>The application use JSP (Java Server Pages). Now, I replace jsp with thymeleaf in my fork.</p>
+
+<p>It is easy to use thymeleaf instead of jsp. Look on the source.</p>
+
+<p>Please tell me if you find a failure or a better way.</p>
+
+<p>At the following you can see a part of differences between jsp and thymeleaf. The complete differences you can see at the source files.</p>
+
+<h2>
+<a name="differences-between-jsp-and-thymeleaf" class="anchor" href="#differences-between-jsp-and-thymeleaf"><span class="octicon octicon-link"></span></a>Differences between jsp and thymeleaf</h2>
+
+<p><strong>Setup</strong></p>
+
+<p>JSP:</p>
+
+<pre><code>private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/jsp/";
+private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
+
+@Bean
+public ViewResolver viewResolver() {
+InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+
+viewResolver.setViewClass(JstlView.class);
+viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
+viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
+
+return viewResolver;
+}
+</code></pre>
+
+<p>Thymeleaf (this is only a part):</p>
+
+<pre><code>@Bean
+public ServletContextTemplateResolver templateResolverServlet() {
+ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+templateResolver.setPrefix("/WEB-INF/html/");
+templateResolver.setSuffix(".html");
+templateResolver.setTemplateMode("LEGACYHTML5");
+templateResolver.setOrder(2);
+templateResolver.setCacheable(false);
+return templateResolver;
+}
+</code></pre>
+
+<p>See the rest on <a href="https://github.com/lightszentip/spring-social-examples-thymeleaf/blob/master/sign-in/spring-mvc-normal/src/main/java/net/petrikainulainen/spring/social/signinmvc/config/ThymeleafView.java">https://github.com/lightszentip/spring-social-examples-thymeleaf/blob/master/sign-in/spring-mvc-normal/src/main/java/net/petrikainulainen/spring/social/signinmvc/config/ThymeleafView.java</a></p>
+
+<p><strong>Layout</strong></p>
+
+<p>For layout in thymeleaf, I have used <a href="https://github.com/ultraq/thymeleaf-layout-dialect">thymeleaf-layout-dialect</a> instead sitemesh.</p>
+
+<p>JSP sitemesh layout:</p>
+
+<pre><code>&lt;div id="view-holder"&gt;
+&lt;sitemesh:write property="body"&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>Thymeleaf layout:</p>
+
+<pre><code>&lt;div id="view-holder"&gt;
+&lt;div layout:fragment="body" /&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>and at the thymeleaf page</p>
+
+<pre><code>layout:fragment="body"
+</code></pre>
+
+<p><strong>isAuthenticated</strong></p>
+
+<p>JSP:</p>
+
+<pre><code>&lt;sec:authorize access="isAuthenticated()"
+</code></pre>
+
+<p>Thymeleaf:</p>
+
+<pre><code> &lt;p sec:authorize="isAuthenticated()" 
+</code></pre>
+
+<p><strong>Link</strong></p>
+
+<p>JSP:</p>
+
+<pre><code>&lt;c:url value="/auth/twitter"
+</code></pre>
+
+<p>Thymeleaf</p>
+
+<pre><code>th:href="@{/auth/facebook}"
+</code></pre>
+
+<p><strong>Username</strong></p>
+
+<p>JSP:</p>
+
+<pre><code> &lt;sec:authentication property="principal.username"/&gt;
+</code></pre>
+
+<p>Thymeleaf:</p>
+
+<pre><code>&lt;span sec:authentication="principal.username"&gt;&lt;/span&gt;
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Spring-social-examples-thymeleaf maintained by <a href="https://github.com/lightszentip">lightszentip</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
