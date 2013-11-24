@@ -9,6 +9,8 @@ It is easy to use thymeleaf instead of jsp. Look on the source.
 
 Please tell me if you find a failure or a better way.
 
+At the following you can see a part off difference between jsp and thymeleaf. The complete differences you can see at the source files.
+
 ## Differences between jsp and thymeleaf ##
 
 **Setup**
